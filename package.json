@@ -6,15 +6,30 @@
         "dev": "vite"
     },
     "devDependencies": {
-        "@tailwindcss/vite": "^4.0.0",
         "@vitejs/plugin-vue": "^5.2.3",
+        "autoprefixer": "^10.4.21",
         "axios": "^1.7.4",
         "concurrently": "^9.0.1",
+        "eslint": "^9.26.0",
+        "eslint-plugin-vue": "^10.1.0",
         "laravel-vite-plugin": "^1.2.0",
-        "tailwindcss": "^4.0.0",
+        "postcss": "^8.5.6",
+        "tailwindcss": "^3.4.17",
         "vite": "^6.0.11"
     },
     "dependencies": {
-        "@inertiajs/vue3": "^2.0.6"
+        "@formkit/addons": "^1.6.9",
+        "@formkit/auto-animate": "^0.8.2",
+        "@formkit/icons": "^1.6.9",
+        "@formkit/inertia": "^0.1.5",
+        "@formkit/themes": "^1.6.9",
+        "@formkit/vue": "^1.6.9",
+        "@headlessui/vue": "^1.7.23",
+        "@heroicons/vue": "^2.2.0",
+        "@inertiajs/vue3": "^2.0.6",
+        "@vueuse/components": "^13.2.0",
+        "vue-input-mask": "^0.0.11",
+        "vue-simple-calendar": "^7.2.1",
+        "vue3-form-wizard": "^0.2.4"
     }
 }
