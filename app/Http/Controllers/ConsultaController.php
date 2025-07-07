@@ -18,16 +18,31 @@ class ConsultaController extends Controller
     public function index()
     {
         $consultas = Consulta::with(['paciente'])
-            ->orderBy('data_consulta', 'desc')
+            ->orderBy('data_consulta', 'asc')->where('status_consulta', '!=', 'Cancelada')
             ->get()->map(function ($consulta) {
-                $consulta->data = Carbon::parse($consulta->data_consulta)->format('d/m/Y');
-                $consulta->hora = Carbon::parse($consulta->hora_consulta)->format('H:i');
+                // Defina explicitamente o fuso horário para UTC ou o fuso do seu servidor
+                $data = Carbon::parse($consulta->data_consulta)->timezone('UTC');
+                $hora = Carbon::parse($consulta->hora_consulta)->timezone('UTC');
+
+                $consulta->data = $data->format('d/m/Y');
+                $consulta->hora = $hora->format('H:i');
+
+                // Adicione os campos originais em formato ISO para o frontend
+                $consulta->data_iso = $data->toISOString();
+                $consulta->hora_iso = $hora->toISOString();
+
                 return $consulta;
             });
 
         return inertia('Consulta/Index', [
             'consultas' => $consultas
         ]);
+    }
+
+    public function searchPaciente(Request $request)
+    {
+        $pacientes = Paciente::searchPaciente($request->input('search'))->get();
+        return response()->json($pacientes);
     }
 
     /**
@@ -44,7 +59,7 @@ class ConsultaController extends Controller
     public function store(Request $request)
     {
         Consulta::create($request->all());
-        return redirect()->route('consulta.index')->with('message', 'Consulta atualizada com sucesso!');
+        return redirect()->route('consulta.index');
     }
 
 
@@ -75,15 +90,15 @@ class ConsultaController extends Controller
     public function update(Request $request, Consulta $consulta)
     {
         $consulta->updateOrInsert($request->all());
-        return redirect()->route('consulta.index')->with('message', 'Consulta atualizada com sucesso!');
+        return redirect()->route('consulta.index');
     }
 
-    public function destroy(Consulta $consulta)
+    public function destroy($consulta)
     {
-        //$consulta->status_consulta = 'Cancelada';
-        //$consulta->save();
-        $consulta->delete();
-        return redirect()->route('consulta.index')->with('message', 'Consulta apagada com sucesso!');
+        $consulta = Consulta::findOrFail($consulta);
+        $consulta->status_consulta = 'Cancelada';
+        $consulta->save();
+        return redirect()->route('consulta.index');
     }
 
     public function atendimento()
@@ -97,10 +112,32 @@ class ConsultaController extends Controller
         ]);
     }
 
+    public function prontuarios()
+    {
+        return inertia('Consulta/IndexProntuarios', [
+            'consultas' => Consulta::with(['paciente', 'anamnese', 'evolucao', 'acompanhamento'])->orderBy('data_consulta', 'asc')->get()->map(function ($consulta) {
+                $data = Carbon::parse($consulta->data_consulta)->format('d/m/Y');
+                $hora = Carbon::parse($consulta->hora_consulta)->format('H:i');
+                $consulta->data = $data;
+                $consulta->hora = $hora;
+                return $consulta;
+            })
+        ]);
+    }
+
     public function createAnamnese(string $id)
     {
-        $paciente = Consulta::findOrFail($id)->paciente;
+        $consulta = Consulta::with('paciente')->findOrFail($id);
+        $paciente = $consulta->paciente;
         return inertia('Consulta/Anamnese/Anamnese', ['id_consulta' => $id, 'grupo_etario' => $paciente->grupo_etario, 'genero' => $paciente->genero]);
+    }
+
+    public function concluirAtendimento($id)
+    {
+        $consulta = Consulta::findOrFail($id);
+        $consulta->status_consulta = 'Concluída';
+        $consulta->save();
+        return redirect()->route('consulta.atendimento');
     }
 
     public function createEvolucao(string $id)
@@ -117,22 +154,60 @@ class ConsultaController extends Controller
     public function storeAcompanhamento(Request $request)
     {
         Acompanhamento::create($request->all());
-        return inertia('Consulta/Acompanhamento/Acompanhamento', ['message' => 'Acompanhamento registrado com sucesso!']);
+        return redirect()->route('consulta.atendimento');
     }
+
+
 
     public function storeEvolucao(Request $request)
     {
         Evolucao::create($request->all());
-        return inertia('Consulta/Evolucao/Evolucao', ['message' => 'Evolução registrada com sucesso!']);
+        return redirect()->route('consulta.atendimento');
     }
 
     public function storeAnamnese(Request $request)
     {
         $paciente = Consulta::findOrFail($request->input('fk_id_consultas'))->paciente;
-        $paciente->updateOrInsert($request->all());
+        $paciente->update($request->only([
+            'gestante',
+            'neuropata',
+            'atleta',
+            'escolaridade',
+            'profissao',
+            'renda_familiar_ibge',
+            'num_pessoas_nucleo_familiar',
+            'motivo_procura',
+            'turno_escolar',
+            'profissao_responsavel',
+            'escolaridade_responsavel'
+        ]));
         $anamnese = new Anamnese();
         $anamnese->create($request->all());
-        return inertia('Consulta/Anamnese/Anamnese', ['message' => 'Anamnese registrada com sucesso!']);
+        return redirect()->route('consulta.atendimento');
+    }
+
+
+
+    public function showAcompanhamento($id)
+    {
+        $acompanhamento = Acompanhamento::findOrFail($id);
+        return inertia(
+            'Consulta/Acompanhamento/ViewAcompanhamento',
+            [
+                'acompanhamento' => $acompanhamento
+            ]
+        );
+
+    }
+
+    public function showAnamnese($id)
+    {
+        $anamnese = Anamnese::findOrFail($id);
+        $consulta = Consulta::with('paciente')->findOrFail($anamnese->fk_id_consultas);
+        $paciente = $consulta->paciente;
+
+        return inertia('Consulta/Anamnese/ViewAnamnese', ['anamnese' => $anamnese, 'paciente' => $paciente]);
+
     }
 
 

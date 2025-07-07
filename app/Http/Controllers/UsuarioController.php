@@ -26,10 +26,12 @@ class UsuarioController extends Controller
 
     public function store(Request $request)
     {
-        $usuario = new Usuario();
-        $usuario->senha = Hash::make($request->input('matricula'));
-        $usuario->create($request->except('senha'));
-        return inertia('Usuario/Cadastro');
+        $data = $request->all();
+        $data['senha'] = Hash::make($request->input('matricula')); // Ou outro campo que deseja usar como senha inicial
+
+        Usuario::create($data);
+
+        return redirect()->route('paciente.index');
     }
 
     public function show(Usuario $usuario)
@@ -52,14 +54,14 @@ class UsuarioController extends Controller
     public function update(Request $request, Usuario $usuario)
     {
         $usuario->updateOrInsert($request->all());
-        return redirect()->route('usuario.index')->with('message', 'Dados cadastrais atualizados com sucesso!');
+        return redirect()->route('usuario.index');
     }
 
     public function destroy(Usuario $usuario)
     {
         $usuario->data_inativacao = Carbon::now('America/Sao_Paulo');
         $usuario->save();
-        return redirect()->route('usuario.index')->with(['message' => 'Usuário desativado com sucesso']);
+        return redirect()->route('usuario.index');
 
     }
 }

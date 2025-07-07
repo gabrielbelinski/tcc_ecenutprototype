@@ -12,7 +12,7 @@ export default defaultConfig({
     ...genesisIcons
   },
   config: {
-    rootClasses,
+    rootClasses
   },
   plugins: [createMultiStepPlugin()
   ]

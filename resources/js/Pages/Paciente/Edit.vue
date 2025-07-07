@@ -222,7 +222,7 @@
 </template>
 
 <script setup>
-import MainLayout from "@/Layouts/MainLayout.vue";
+import MainLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { useForm, usePage } from "@inertiajs/vue3";
 
 const page = usePage();
@@ -286,7 +286,7 @@ const update = () => {
             console.error(errors);
         },
         onSuccess: () => {
-            console.log("Formulário enviado com sucesso!");
+            alert("Alterações salvas!");
         },
     });
 };

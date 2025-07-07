@@ -175,7 +175,7 @@ return new class extends Migration {
             $table->string('ultima_medida_pa')->nullable();
             $table->text('leite_materno')->nullable();
             $table->text('condicoes_seios')->nullable();
-            $table->boolean('uso_suplementos')->default(false);
+            $table->boolean('uso_suplementos')->nullable();
             $table->text('suplementacao')->nullable();
             $table->string('alteracao_humor')->nullable();
             $table->boolean('edema')->nullable();

@@ -102,48 +102,40 @@ const columns = [
                 {
                     options: [
                         {
-                            label: "Anamnese",
+                            label: "Ver anamnese",
                             key: "anamnese",
+                            disabled: !row.anamnese, // Desabilita se não existir anamnese
                         },
                         {
-                            label: "Acompanhamento",
+                            label: "Ver acompanhamento",
                             key: "acompanhamento",
+                            disabled: !row.acompanhamento, // Desabilita se não existir acompanhamento
                         },
                         {
-                            label: "Evolução",
+                            label: "Ver evolução",
                             key: "evolucao",
-                        },
-                        {
-                            label: "Concluir",
-                            key: "concluir",
+                            disabled: !row.evolucao, // Desabilita se não existir evolução
                         },
                     ],
                     onSelect: (key) => {
-                        if (key == "concluir") {
-                            if (
-                                confirm(
-                                    "Tem certeza que deseja finalizar o atendimento? Esta ação não pode ser revertida!"
-                                )
-                            ) {
-                                router.visit(
-                                    `/consulta/atendimento/concluir/${row.id}`
-                                );
-                            }
-                        } else {
+                        // Obtém o ID correto baseado no tipo selecionado
+                        const idMap = {
+                            anamnese: row.anamnese?.id,
+                            acompanhamento: row.acompanhamento?.id,
+                            evolução: row.evolucao?.id,
+                        };
+
+                        const recordId = idMap[key];
+
+                        if (recordId) {
                             router.visit(
-                                `/consulta/atendimento/${key}/${row.id}`
+                                `/consulta/atendimento/prontuarios/${key}/${recordId}`
                             );
                         }
                     },
                 },
-                {
-                    default: () =>
-                        h(
-                            NButton,
-                            { type: "primary", size: "small", tertiary: true },
-                            { default: () => "Registrar atendimento" }
-                        ),
-                }
+                // Trigger do dropdown (pode ser um botão ou ícone)
+                h(NButton, { size: "small" }, () => "Ações")
             ),
     },
 ];

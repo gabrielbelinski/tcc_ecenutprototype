@@ -45,4 +45,12 @@ class Paciente extends Model
     {
         return $this->hasMany(Consulta::class, 'fk_id_pacientes');
     }
+
+    public function scopeSearchPaciente($query, $search)
+    {
+        return $query->when($search, function ($query, $search) {
+            $query->where('nome', 'like', '%' . $search . '%')
+                ->orWhere('cpf', 'like', '%' . $search . '%');
+        });
+    }
 }

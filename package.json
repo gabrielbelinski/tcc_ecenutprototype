@@ -13,8 +13,11 @@
         "eslint": "^9.26.0",
         "eslint-plugin-vue": "^10.1.0",
         "laravel-vite-plugin": "^1.2.0",
+        "naive-ui": "^2.42.0",
         "postcss": "^8.5.6",
         "tailwindcss": "^3.4.17",
+        "vfonts": "^0.0.3",
+        "vicons": "^0.0.1",
         "vite": "^6.0.11"
     },
     "dependencies": {
@@ -27,9 +30,12 @@
         "@headlessui/vue": "^1.7.23",
         "@heroicons/vue": "^2.2.0",
         "@inertiajs/vue3": "^2.0.6",
+        "@vicons/fluent": "^0.13.0",
         "@vueuse/components": "^13.2.0",
+        "buefy": "^1.0.1",
         "vue-input-mask": "^0.0.11",
         "vue-simple-calendar": "^7.2.1",
-        "vue3-form-wizard": "^0.2.4"
+        "vue3-form-wizard": "^0.2.4",
+        "vuesax": "^4.0.1-alpha.25"
     }
 }

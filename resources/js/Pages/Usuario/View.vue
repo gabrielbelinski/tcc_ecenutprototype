@@ -146,7 +146,7 @@
 </template>
 
 <script setup>
-import MainLayout from "@/Layouts/MainLayout.vue";
+import MainLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { usePage } from "@inertiajs/vue3";
 import { router } from "@inertiajs/vue3";
 

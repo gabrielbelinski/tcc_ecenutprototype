@@ -3,69 +3,68 @@
         <FormKit type="form" @submit="create" :actions="false">
             <FormKit type="multi-step" tab-style="progress">
                 <FormKit type="step" name="agendamento" label="Agendamento">
-                    <label
-                        class="block text-neutral-700 text-xs font-bold dark:text-neutral-300 mb-1"
-                        >Nome ou CPF do paciente</label
-                    >
-                    <Combobox v-model="selected" nullable>
-                        <div class="relative">
-                            <ComboboxInput
-                                class="text-sm flex items-center w-full py-2 px-3 rounded-xl border border-neutral-300 bg-white focus-within:ring-1 focus-within:!ring-green-500 focus-within:!border-green-500 group-data-[invalid]:border-red-500 group-data-[invalid]:ring-1 group-data-[invalid]:ring-red-500 group-data-[disabled]:bg-neutral-100 group-data-[disabled]:!cursor-not-allowed shadow-md group-[]/repeater:shadow-none group-[]/multistep:shadow-none dark:bg-transparent dark:border-neutral-300 dark:group-data-[disabled]:bg-neutral-800/5 dark:group-data-[invalid]:border-red-500 dark:group-data-[invalid]:ring-red-500"
-                                :displayValue="(paciente) => paciente?.nome"
-                                @change="query = $event.target.value"
-                                placeholder="Buscar por nome ou CPF"
-                            />
-                            <ComboboxOptions
-                                class="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-auto"
-                            >
-                                <ComboboxOption
-                                    v-for="paciente in filteredPacientes"
-                                    :key="paciente.id"
-                                    :value="paciente"
-                                    v-slot="{ active, selected }"
+                    <div>
+                        <label
+                            class="block text-neutral-700 text-base font-bold dark:text-neutral-300 mb-1.5 formkit-label"
+                            >Nome ou CPF do paciente</label
+                        >
+                        <Combobox v-model="selected" nullable>
+                            <div class="relative">
+                                <ComboboxInput
+                                    class="text-lg flex items-center w-full py-2.5 px-3.5 mb-3 rounded-full border border-neutral-400 bg-white focus-within:ring-1 focus-within:!ring-green-500 focus-within:!border-green-500 group-data-[invalid]:border-red-500 group-data-[invalid]:ring-1 group-data-[invalid]:ring-red-500 group-data-[disabled]:bg-neutral-100 group-data-[disabled]:!cursor-not-allowed shadow group-[]/repeater:shadow-none group-[]/multistep:shadow-none dark:bg-transparent dark:border-neutral-500 dark:group-data-[disabled]:bg-neutral-800/5 dark:group-data-[invalid]:border-red-500 dark:group-data-[invalid]:ring-red-500 formkit-inner"
+                                    :displayValue="(paciente) => paciente?.nome"
+                                    @change="query = $event.target.value"
+                                    placeholder="Buscar por nome ou CPF"
+                                />
+                                <ComboboxOptions
+                                    class="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-60 overflow-auto"
                                 >
-                                    <li
-                                        :class="[
-                                            'px-4 py-2 cursor-pointer',
-                                            active
-                                                ? 'bg-green-100'
-                                                : 'bg-white',
-                                        ]"
+                                    <ComboboxOption
+                                        v-for="paciente in filteredPacientes"
+                                        :key="paciente.id"
+                                        :value="paciente"
+                                        v-slot="{ active, selected }"
                                     >
-                                        <div class="flex justify-between">
-                                            <span>{{ paciente.nome }}</span>
-                                            <span
-                                                class="text-gray-500 text-sm"
-                                                >{{ paciente.cpf }}</span
-                                            >
-                                        </div>
-                                        <div
-                                            v-if="selected"
-                                            class="text-green-600 text-xs"
+                                        <li
+                                            :class="[
+                                                'px-4 py-2 cursor-pointer',
+                                                active
+                                                    ? 'bg-green-100'
+                                                    : 'bg-white',
+                                            ]"
                                         >
-                                            Selecionado
-                                        </div>
-                                    </li>
-                                </ComboboxOption>
-                            </ComboboxOptions>
-                        </div>
-                    </Combobox>
-
-                    <div class="grid grid-cols-2 gap-3">
-                        <FormKit
-                            type="date"
-                            label="Data do atendimento"
-                            v-model="form.data_consulta"
-                            validation="required"
-                        />
-
-                        <FormKit
-                            type="time"
-                            label="Horário"
-                            v-model="form.hora_consulta"
-                            validation="required"
-                        />
+                                            <div class="flex justify-between">
+                                                <span>{{ paciente.nome }}</span>
+                                                <span
+                                                    class="text-gray-500 text-sm"
+                                                    >{{ paciente.cpf }}</span
+                                                >
+                                            </div>
+                                            <div
+                                                v-if="selected"
+                                                class="text-green-600 text-xs"
+                                            >
+                                                Selecionado
+                                            </div>
+                                        </li>
+                                    </ComboboxOption>
+                                </ComboboxOptions>
+                            </div>
+                        </Combobox>
                     </div>
+                    <FormKit
+                        type="date"
+                        label="Data do atendimento"
+                        v-model="form.data_consulta"
+                        validation="required"
+                    />
+
+                    <FormKit
+                        type="time"
+                        label="Horário"
+                        v-model="form.hora_consulta"
+                        validation="required"
+                    />
 
                     <FormKit
                         type="radio"
@@ -136,7 +135,7 @@
 </template>
 
 <script setup>
-import MainLayout from "@/Layouts/MainLayout.vue";
+import MainLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { useForm, usePage } from "@inertiajs/vue3";
 import { ref, computed, watch } from "vue";
 import axios from "axios";

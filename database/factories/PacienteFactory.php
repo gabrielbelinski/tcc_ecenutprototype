@@ -9,35 +9,112 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class PacienteFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
-        return [
-        'nome' => fake()->name(),
-        'data_nascimento' => fake('pt-BR')->date('d-m-Y'),
-        'cpf' =>fake('pt-BR')->numberBetween(5000,10000),
-        'rg' =>fake('pt-BR')->numberBetween(5000,10000),
-        'encaminhamento' =>fake()->randomElement(['Não', 'SUS', 'CEFISIO', 'Outro']),
-        'telefone' => fake('pt-BR')->phoneNumber(),
-        'email' => fake('pt-BR')->unique()->safeEmail(),
-        'aluno_unicentro' =>fake()->randomElement(['S', 'N']),
-        'genero'  =>fake()->randomElement(['M', 'F']),
-        'tipo' =>fake()->randomElement(['Adulto', 'Idoso', 'Pediatria', 'Adolescente', 'Gestante', 'Neuropata']),
-        'rua' =>fake('pt-BR')->streetName(),
-        'numero' => fake('pt-BR')->numberBetween(1,500),
-        'bairro' =>fake('pt-BR')->citySuffix(),
-        'cep' =>fake('pt-BR')->postcode(),
-        'cidade' =>fake('pt-BR')->city(),
-        'estado' =>fake('pt-BR')->citySuffix(),
-        'escolaridade'=>fake()->randomElement(['Não alfabetizado', 'Ensino Médio Incompleto', 'Ensino Médio Completo', 'Ensino Fundamental Incompleto', 'Ensino Fundamental Completo', 'Ensino Superior Incompleto', 'Ensino Superior Completo']),
-        'profissao' =>fake()->jobTitle(),
-        'renda_familiar_ibge' => '5000',
-        'num_pessoas_nucleo_familiar' => fake('pt-BR')->numberBetween(1,10),
-        'motivo_procura' => 'Lorem ipsum'
+        $faker = \Faker\Factory::create('pt_BR');
+
+        $grupoEtario = $faker->randomElement([
+            'Recém nascido',
+            'Criança',
+            'Adolescente',
+            'Adulto',
+            'Idoso',
+        ]);
+
+        $genero = $faker->randomElement([
+            'Masculino',
+            'Feminino',
+            'Outro',
+            'Prefere não informar',
+        ]);
+
+        $encaminhamento = $faker->randomElement([
+            'Particular',
+            'Médico',
+            'SUS',
+            'UBS',
+            'Escola',
+            'CEFISIO',
+            'CAEEF',
+            'Personal Trainer',
+            'Outro',
+        ]);
+
+        $rendaIBGE = $faker->randomElement([
+            'Não sabe',
+            'E',
+            'D',
+            'C',
+            'B',
+            'A'
+        ]);
+
+        $dadosResponsavel = in_array($grupoEtario, ['Recém nascido', 'Criança', 'Adolescente']) ? [
+            'motivo_procura' => $faker->randomElement([
+                'Perda de peso',
+                'Ganho de peso',
+                'Alergias ou intolerâncias alimentares',
+                'Doenças',
+                'Reeducação alimentar',
+                'Hipertrofia',
+                'Outro',
+            ]),
+            'turno_escolar' => $faker->randomElement(['Matutino', 'Vespertino', 'Noturno']),
+            'nome_responsavel' => $faker->name(),
+            'parentesco_responsavel' => $faker->randomElement([
+                'Pai/Mãe',
+                'Avó/Avô',
+                'Tio/Tia',
+                'Irmão/Irmã',
+                'Outro',
+            ]),
+            'profissao_responsavel' => $faker->jobTitle(),
+            'escolaridade_responsavel' => $faker->randomElement([
+                'Ensino Fundamental',
+                'Ensino Médio',
+                'Ensino Superior',
+                'Pós-graduação',
+                'Não alfabetizado',
+            ]),
+        ] : [
+            'motivo_procura' => null,
+            'turno_escolar' => null,
+            'nome_responsavel' => null,
+            'parentesco_responsavel' => null,
+            'profissao_responsavel' => null,
+            'escolaridade_responsavel' => null,
         ];
+
+        return array_merge([
+            'nome' => $faker->name(),
+            'data_nascimento' => $faker->date(),
+            'cpf' => $faker->unique()->cpf(false),
+            'rg' => $faker->unique()->numerify('##.###.###-#'),
+            'encaminhamento' => $encaminhamento,
+            'telefone' => $faker->cellphoneNumber(),
+            'email' => $faker->safeEmail(),
+            'aluno_unicentro' => $faker->boolean(20),
+            'gestante' => $faker->boolean(10),
+            'neuropata' => $faker->boolean(10),
+            'atleta' => $faker->boolean(15),
+            'genero' => $genero,
+            'grupo_etario' => $grupoEtario,
+            'rua' => $faker->streetName(),
+            'numero' => $faker->buildingNumber(),
+            'bairro' => $faker->optional()->citySuffix(),
+            'cep' => $faker->postcode(),
+            'cidade' => $faker->city(),
+            'estado' => $faker->stateAbbr(),
+            'escolaridade' => $faker->randomElement([
+                'Ensino Fundamental',
+                'Ensino Médio',
+                'Ensino Superior',
+                'Pós-graduação',
+                'Não alfabetizado',
+            ]),
+            'profissao' => $faker->jobTitle(),
+            'renda_familiar_ibge' => $rendaIBGE,
+            'num_pessoas_nucleo_familiar' => $faker->numberBetween(1, 8),
+        ], $dadosResponsavel);
     }
 }

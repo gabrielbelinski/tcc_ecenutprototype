@@ -14,34 +14,24 @@ class PacienteController extends Controller
      */
     public function index()
     {
-
-        //$pacienteQuery = Paciente::query();
-        //$this->pacienteSearch($pacienteQuery, $request->search);
-
-        return inertia(
-            'Paciente/Index',
-            [
-                'pacientes' => Paciente::all()->map(function ($paciente) {
-                    $paciente->data = Carbon::parse($paciente->data_nascimento)->format('d/m/Y');
-                    return $paciente;
-                })
-            ]
-        );
-    }
-
-    protected function pacienteSearch($query, $search)
-    {
-        return $query->when($search, function ($query, $search) {
-            $query->where('nome', 'like', '%' . $search . '%');
+        $pacientes = Paciente::paginate(10)->map(function ($paciente) {
+            $paciente->data = Carbon::parse($paciente->data_nascimento)->format('d/m/Y');
+            return $paciente;
         });
+
+        return inertia('Paciente/Index', [
+            'pacientes' => $pacientes,
+        ]);
     }
+
+
 
     /**
      * Show the form for creating a new resource.
      */
     public function create()
     {
-        return inertia('Paciente/Create', );
+        return inertia('Paciente/Create');
     }
 
     /**
@@ -69,7 +59,7 @@ class PacienteController extends Controller
             'nome_responsavel',
             'parentesco_responsavel'
         ]));
-        return redirect()->route('paciente.index')->with('message', 'Cadastro efetuado com sucesso!');
+        return redirect()->route('paciente.index');
     }
 
     public function show(Paciente $paciente)
@@ -92,13 +82,13 @@ class PacienteController extends Controller
     public function update(Request $request, Paciente $paciente)
     {
         $paciente->update($request->all());
-        return redirect()->route('paciente.index')->with('message', 'Cadastro atualizado com sucesso!');
+        return redirect()->route('paciente.index');
     }
 
     public function destroy(Paciente $paciente)
     {
         $paciente->delete();
-        return redirect()->route('paciente.index')->with('message', 'Cadastro excluído com sucesso!');
+        return redirect()->route('paciente.index');
     }
 
     public function searchPaciente(Request $request)

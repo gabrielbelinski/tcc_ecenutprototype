@@ -20,10 +20,10 @@ return new class extends Migration {
             $table->string('encaminhamento')->nullable();
             $table->string('telefone');
             $table->string('email')->nullable();
-            $table->boolean('aluno_unicentro')->default(false);
-            $table->boolean('gestante')->default(false);
-            $table->boolean('neuropata')->default(false);
-            $table->boolean('atleta')->default(false);
+            $table->boolean('aluno_unicentro')->nullable();
+            $table->boolean('gestante')->nullable();
+            $table->boolean('neuropata')->nullable();
+            $table->boolean('atleta')->nullable();
             $table->string('genero');
             $table->string('grupo_etario');
             $table->string('rua')->nullable();

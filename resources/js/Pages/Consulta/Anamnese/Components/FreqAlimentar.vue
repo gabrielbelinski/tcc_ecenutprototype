@@ -1,5 +1,5 @@
 <template>
-    <div class="mb-4">
+    <div class="grid grid-cols-2 gap-3">
         <FormKit
             type="number"
             min="0"

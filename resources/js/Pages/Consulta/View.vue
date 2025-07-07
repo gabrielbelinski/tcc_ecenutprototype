@@ -1,6 +1,12 @@
 <template>
     <MainLayout>
-        <FormKit type="multi-step" tab-style="progress">
+        <FormKit
+            type="multi-step"
+            tab-style="progress"
+            :classes="{
+                outer: 'max-w-[1200px], min-w-[1200px]',
+            }"
+        >
             <FormKit type="step" name="agendamento" label="Agendamento"
                 ><div class="grid grid-cols-2 gap-3">
                     <FormKit
@@ -69,11 +75,11 @@
 </template>
 
 <script setup>
-import { usePage } from "@inertiajs/vue3";
-import MainLayout from "@/Layouts/MainLayout.vue";
+import { usePage, router } from "@inertiajs/vue3";
+import MainLayout from "@/Layouts/AuthenticatedLayout.vue";
 const page = usePage();
 
 const goToList = () => {
-    router.visit("/consulta");
+    router.get("/consulta");
 };
 </script>

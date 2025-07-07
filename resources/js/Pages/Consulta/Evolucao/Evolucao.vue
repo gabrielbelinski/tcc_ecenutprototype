@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import MainLayout from "@/Layouts/MainLayout.vue";
+import MainLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { useForm, usePage } from "@inertiajs/vue3";
 import Adolescente from "./Components/Adolescente.vue";
 import Atleta from "./Components/Atleta.vue";
@@ -97,7 +97,7 @@ const create = () => {
             console.error(errors);
         },
         onSuccess: () => {
-            console.log("Formulário enviado com sucesso!");
+            alert("Evolução registrada com sucesso!");
         },
     });
 };

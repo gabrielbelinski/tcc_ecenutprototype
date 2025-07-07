@@ -154,9 +154,8 @@
 </template>
 
 <script setup>
-import Formulario from "@/Components/Formulario.vue";
 import RegistroAlimentar from "@/Components/RegistroAlimentar.vue";
-import MainLayout from "@/Layouts/MainLayout.vue";
+import MainLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { useForm } from "@inertiajs/vue3";
 import { usePage } from "@inertiajs/vue3";
 const page = usePage();
@@ -191,7 +190,7 @@ const create = () => {
             console.error(errors);
         },
         onSuccess: () => {
-            console.log("Formulário enviado com sucesso!");
+            alert("Acompanhamento registrado com sucesso!");
         },
     });
 };

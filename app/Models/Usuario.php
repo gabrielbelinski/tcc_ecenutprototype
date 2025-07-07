@@ -14,7 +14,7 @@ class Usuario extends Authenticatable
 
     protected $fillable = [
         'email',
-        'senha',
+        'senha', // Custom password column
         'matricula',
         'genero',
         'data_nascimento',
@@ -35,5 +35,10 @@ class Usuario extends Authenticatable
     public function consultasUsuario(): HasMany
     {
         return $this->hasMany(Consulta::class, 'fk_id_usuarios');
+    }
+
+    public function getAuthPassword()
+    {
+        return $this->senha; // Custom password column
     }
 }

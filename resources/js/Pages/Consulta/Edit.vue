@@ -1,7 +1,13 @@
 <template>
     <MainLayout>
         <FormKit type="form" @submit="update" :actions="false">
-            <FormKit type="multi-step" tab-style="progress">
+            <FormKit
+                type="multi-step"
+                tab-style="progress"
+                :classes="{
+                    outer: 'max-w-[1200px], min-w-[1200px]',
+                }"
+            >
                 <FormKit type="step" name="agendamento" label="Agendamento">
                     <div class="grid grid-cols-2 gap-3">
                         <FormKit
@@ -94,7 +100,7 @@
 </template>
 
 <script setup>
-import MainLayout from "@/Layouts/MainLayout.vue";
+import MainLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { useForm, usePage } from "@inertiajs/vue3";
 
 const page = usePage();

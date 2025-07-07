@@ -9,30 +9,33 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class UsuarioFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
+        $faker = \Faker\Factory::create('pt_BR');
+
         return [
-            'email' => fake('pt-BR')->unique()->safeEmail(),
-        'senha' => '123456',
-        'matricula' =>fake('pt-BR')->unique()->numberBetween(5000,10000),
-        'genero' =>fake()->randomElement(['M','F']),
-        'data_nascimento' =>fake('pt-BR')->date('d-m-Y'),
-        'nome' => fake('pt-BR')->name(),
-        'telefone' => fake('pt-BR')->phoneNumber(),
-        'rg'  =>fake('pt-BR')->numberBetween(5000,10000),
-        'cpf' =>fake('pt-BR')->numberBetween(5000,10000),
-        'rua' =>fake('pt-BR')->streetName(),
-        'numero' =>fake('pt-BR')->numberBetween(1, 4000),
-        'bairro' => 'Centro',
-        'cep'=>fake('pt-BR')->postcode(),
-        'cidade'=>fake('pt-BR')->city(),
-        'estado' =>fake('pt-BR')->citySuffix(),
-        'tipo' =>fake('pt-BR')->randomElement(['Professor','Estagiario', 'Secretario']),
+            'nome' => $faker->name(),
+            'email' => $faker->unique()->safeEmail(),
+            'senha' => bcrypt('senha123'), // você pode alterar conforme o hash usado no sistema
+            'matricula' => $faker->unique()->numerify('########'),
+            'genero' => $faker->randomElement([
+                'Masculino',
+                'Feminino',
+                'Outro',
+                'Prefere não informar',
+            ]),
+            'data_nascimento' => $faker->optional()->date(),
+            'data_inativacao' => $faker->optional(0.1)->dateTime(), // 10% chance de estar inativo
+            'telefone' => $faker->optional()->cellphoneNumber(),
+            'rg' => $faker->optional()->numerify('##.###.###-#'),
+            'cpf' => $faker->optional()->cpf(false),
+            'rua' => $faker->optional()->streetName(),
+            'numero' => $faker->optional()->buildingNumber(),
+            'bairro' => $faker->optional()->citySuffix(),
+            'cep' => $faker->optional()->postcode(),
+            'cidade' => $faker->optional()->city(),
+            'estado' => $faker->optional()->stateAbbr(),
+            'tipo_usuario' => $faker->randomElement(['Estagiário', 'Secretário', 'Docente']),
         ];
     }
 }

@@ -111,7 +111,10 @@
                                 label: 'B - De R$ 7.250,00 a R$ 14.499,99',
                             },
                             { value: 'A', label: 'A - R$ 14.500 ou mais' },
-                            { value: 'Não sabe', label: 'Não sabe informar' },
+                            {
+                                value: 'Não sabe',
+                                label: 'Não sabe informar',
+                            },
                         ]"
                     />
 
@@ -961,6 +964,7 @@
                             form.habitos_atv_fisica != 'Sedentário' &&
                             form.habitos_atv_fisica != null
                         "
+                        class="animate-fade-in-up"
                     >
                         <FormKit
                             type="textarea"
@@ -1462,7 +1466,7 @@
 <script setup>
 import RegistroAlimentar from "@/Components/RegistroAlimentar.vue";
 import { useForm, usePage } from "@inertiajs/vue3";
-import MainLayout from "@/Layouts/MainLayout.vue";
+import MainLayout from "@/Layouts/AuthenticatedLayout.vue";
 import FreqAlimentar from "./Components/FreqAlimentar.vue";
 
 const page = usePage();
@@ -1717,7 +1721,7 @@ const create = () => {
             console.error(errors);
         },
         onSuccess: () => {
-            console.log("Formulário enviado com sucesso!");
+            alert("Anamnese registrada com sucesso!");
         },
     });
 };

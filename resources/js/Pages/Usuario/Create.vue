@@ -136,7 +136,7 @@
 </template>
 
 <script setup>
-import MainLayout from "@/Layouts/MainLayout.vue";
+import MainLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { useForm, usePage } from "@inertiajs/vue3";
 const page = usePage();
 
