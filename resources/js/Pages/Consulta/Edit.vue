@@ -105,6 +105,7 @@ import { useForm, usePage } from "@inertiajs/vue3";
 
 const page = usePage();
 const form = useForm({
+    fk_id_pacientes: page.props.consulta.fk_id_pacientes,
     data_consulta: page.props.consulta.data_consulta,
     hora_consulta: page.props.consulta.hora_consulta,
     modalidade_consulta: page.props.consulta.modalidade_consulta,
@@ -116,12 +117,12 @@ const form = useForm({
 });
 
 const update = () => {
-    form.put(`/consulta/${page.props.consulta.id}/update`, {
+    form.put(`/consulta/${page.props.consulta.id}`, {
         onError: (errors) => {
             console.error(errors);
         },
         onSuccess: () => {
-            console.log("Formulário enviado com sucesso!");
+            alert("Consulta reagendada com sucesso!");
         },
     });
 };

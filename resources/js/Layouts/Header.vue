@@ -8,9 +8,6 @@
             alt="Logo"
             class="h-8 invert"
         />
-        <!-- Logo -->
-
-        <!-- Menus agrupados -->
         <div class="flex items-center gap-6">
             <n-dropdown
                 v-for="section in filteredSections"
@@ -22,7 +19,6 @@
             </n-dropdown>
         </div>
 
-        <!-- Sessão: Perfil e Sair -->
         <div class="flex items-center gap-2">
             <div class="text-right">
                 <p class="text-xs font-medium">{{ props.auth.user.nome }}</p>
@@ -65,12 +61,11 @@ import {
     NDropdown,
 } from "naive-ui";
 
-// Todos os menus disponíveis
 const allSections = [
     {
         title: "Início",
         items: [{ href: "/", label: "Página Inicial", icon: HomeIcon }],
-        allowed: ["Docente", "Estagiário", "Secretário"], // Todos podem ver
+        allowed: ["Docente", "Estagiário", "Secretário"],
     },
     {
         title: "Cadastro",
@@ -111,14 +106,17 @@ const allSections = [
     {
         title: "Avaliação",
         items: [
-            { href: "/", label: "Submissão", icon: DocumentArrowUpIcon },
+            {
+                href: "/avaliacao/create",
+                label: "Submissão",
+                icon: DocumentArrowUpIcon,
+            },
             { href: "/", label: "Correção", icon: DocumentCheckIcon },
         ],
         allowed: ["Docente", "Estagiário"],
     },
 ];
 
-// Filtra as seções baseadas no tipo de usuário
 const filteredSections = computed(() => {
     return allSections.filter(
         (section) =>
@@ -126,12 +124,10 @@ const filteredSections = computed(() => {
     );
 });
 
-// Sessão separada (direita)
 const sessionSection = {
     items: [{ label: "Sair", icon: UserIcon, action: "logout" }],
 };
 
-// Função para montar os itens dropdown
 function getDropdownOptions(items) {
     return items.map((item) => ({
         label: item.label,

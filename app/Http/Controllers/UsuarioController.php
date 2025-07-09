@@ -27,7 +27,7 @@ class UsuarioController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
-        $data['senha'] = Hash::make($request->input('matricula')); // Ou outro campo que deseja usar como senha inicial
+        $data['senha'] = Hash::make($request->input('matricula'));
 
         Usuario::create($data);
 

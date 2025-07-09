@@ -137,7 +137,6 @@
                     </div>
                 </FormKit>
 
-                <!-- Step 3: Registro Alimentar -->
                 <FormKit
                     type="step"
                     name="registroalimentar"

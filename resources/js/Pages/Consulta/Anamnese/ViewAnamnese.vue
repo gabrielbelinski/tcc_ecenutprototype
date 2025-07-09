@@ -1591,12 +1591,12 @@
                     help="Outras informações importantes"
                     disabled
                 />
-                <template #stepNext
-                    ><FormKit
-                        type="submit"
-                        label="Finalizar"
-                        disabled
-                    ></FormKit>
+                <template #stepNext>
+                    <FormKit
+                        type="button"
+                        label="Lista de prontuários"
+                        @click="goToList"
+                    />
                 </template>
             </FormKit>
         </FormKit>
@@ -1605,11 +1605,15 @@
 
 <script setup>
 import RegistroAlimentar from "@/Components/RegistroAlimentar.vue";
-import { usePage } from "@inertiajs/vue3";
+import { usePage, router } from "@inertiajs/vue3";
 import MainLayout from "@/Layouts/AuthenticatedLayout.vue";
 import FreqAlimentar from "./Components/FreqAlimentar.vue";
 
 const page = usePage();
+
+const goToList = () => {
+    router.get("/consulta/atendimento/prontuarios");
+};
 
 const alimentos = [
     { label: "Leite e derivados", value: "leite_derivados" },

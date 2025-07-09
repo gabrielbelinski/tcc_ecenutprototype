@@ -2,33 +2,7 @@
     <MainLayout>
         <div class="container m-auto px-2.5 py-3">
             <div class="bg-gray-100 rounded-md p-3">
-                <n-data-table
-                    :columns="columns"
-                    :data="paginatedConsultas"
-                    :pagination="false"
-                    :row-key="(row) => row.id"
-                    class="rounded-lg shadow"
-                />
-
-                <div
-                    class="flex justify-between mt-4 rounded-lg shadow bg-white"
-                >
-                    <n-button
-                        @click="previousPage"
-                        :disabled="currentPage === 1"
-                    >
-                        Anterior
-                    </n-button>
-                    <span class="mt-2"
-                        >Página {{ currentPage }} de {{ totalPages }}</span
-                    >
-                    <n-button
-                        @click="nextPage"
-                        :disabled="currentPage >= totalPages"
-                    >
-                        Próxima
-                    </n-button>
-                </div>
+                <h1>Página em construção!</h1>
             </div>
         </div>
     </MainLayout>
@@ -46,13 +20,6 @@ const perPage = ref(10);
 
 const totalPages = computed(() =>
     Math.ceil(page.props.consultas.length / perPage.value)
-);
-
-const paginatedConsultas = computed(() =>
-    page.props.consultas.slice(
-        (currentPage.value - 1) * perPage.value,
-        currentPage.value * perPage.value
-    )
 );
 
 const nextPage = () => {
@@ -102,38 +69,48 @@ const columns = [
                 {
                     options: [
                         {
-                            label: "Ver anamnese",
+                            label: "Anamnese",
                             key: "anamnese",
-                            disabled: !row.anamnese,
                         },
                         {
-                            label: "Ver acompanhamento",
+                            label: "Acompanhamento",
                             key: "acompanhamento",
-                            disabled: !row.acompanhamento,
                         },
                         {
-                            label: "Ver evolução",
+                            label: "Evolução",
                             key: "evolucao",
-                            disabled: !row.evolucao,
+                        },
+                        {
+                            label: "Concluir",
+                            key: "concluir",
                         },
                     ],
                     onSelect: (key) => {
-                        const idMap = {
-                            anamnese: row.anamnese?.id,
-                            acompanhamento: row.acompanhamento?.id,
-                            evolucao: row.evolucao?.id,
-                        };
-
-                        const recordId = idMap[key];
-
-                        if (recordId) {
+                        if (key == "concluir") {
+                            if (
+                                confirm(
+                                    "Tem certeza que deseja finalizar o atendimento? Esta ação não pode ser revertida!"
+                                )
+                            ) {
+                                router.visit(
+                                    `/consulta/atendimento/concluir/${row.id}`
+                                );
+                            }
+                        } else {
                             router.visit(
-                                `/consulta/atendimento/prontuarios/${key}/${recordId}`
+                                `/consulta/atendimento/${key}/${row.id}`
                             );
                         }
                     },
                 },
-                h(NButton, { size: "small" }, () => "Ações")
+                {
+                    default: () =>
+                        h(
+                            NButton,
+                            { type: "primary", size: "small", tertiary: true },
+                            { default: () => "Registrar atendimento" }
+                        ),
+                }
             ),
     },
 ];

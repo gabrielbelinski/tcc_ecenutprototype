@@ -20,16 +20,12 @@ class ConsultaController extends Controller
         $consultas = Consulta::with(['paciente'])
             ->orderBy('data_consulta', 'asc')->where('status_consulta', '!=', 'Cancelada')
             ->get()->map(function ($consulta) {
-                // Defina explicitamente o fuso horário para UTC ou o fuso do seu servidor
-                $data = Carbon::parse($consulta->data_consulta)->timezone('UTC');
-                $hora = Carbon::parse($consulta->hora_consulta)->timezone('UTC');
+                $data = Carbon::parse($consulta->data_consulta);
+                $hora = Carbon::parse($consulta->hora_consulta);
 
                 $consulta->data = $data->format('d/m/Y');
                 $consulta->hora = $hora->format('H:i');
 
-                // Adicione os campos originais em formato ISO para o frontend
-                $consulta->data_iso = $data->toISOString();
-                $consulta->hora_iso = $hora->toISOString();
 
                 return $consulta;
             });
@@ -87,9 +83,9 @@ class ConsultaController extends Controller
         ]);
     }
 
-    public function update(Request $request, Consulta $consulta)
+    public function update(Request $request, Consulta $consultum)
     {
-        $consulta->updateOrInsert($request->all());
+        $consultum->update($request->all());
         return redirect()->route('consulta.index');
     }
 
@@ -115,7 +111,7 @@ class ConsultaController extends Controller
     public function prontuarios()
     {
         return inertia('Consulta/IndexProntuarios', [
-            'consultas' => Consulta::with(['paciente', 'anamnese', 'evolucao', 'acompanhamento'])->orderBy('data_consulta', 'asc')->get()->map(function ($consulta) {
+            'consultas' => Consulta::with(['paciente', 'anamnese', 'evolucao', 'acompanhamento'])->orderBy('data_consulta', 'asc')->orderBy('hora_consulta', 'asc')->get()->map(function ($consulta) {
                 $data = Carbon::parse($consulta->data_consulta)->format('d/m/Y');
                 $hora = Carbon::parse($consulta->hora_consulta)->format('H:i');
                 $consulta->data = $data;
@@ -207,6 +203,16 @@ class ConsultaController extends Controller
         $paciente = $consulta->paciente;
 
         return inertia('Consulta/Anamnese/ViewAnamnese', ['anamnese' => $anamnese, 'paciente' => $paciente]);
+
+    }
+
+    public function showEvolucao($id)
+    {
+        $evolucao = Evolucao::findOrFail($id);
+        $consulta = Consulta::with('paciente')->findOrFail($evolucao->fk_id_consultas);
+        $paciente = $consulta->paciente;
+
+        return inertia('Consulta/Evolucao/ViewEvolucao', ['evolucao' => $evolucao, 'paciente' => $paciente]);
 
     }
 

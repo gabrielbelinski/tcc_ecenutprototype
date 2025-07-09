@@ -2,7 +2,6 @@
     <MainLayout>
         <FormKit type="form" @submit="create" :actions="false">
             <FormKit type="multi-step" tab-style="progress">
-                <!-- Passo 1: Identificação -->
                 <FormKit type="step" name="identificacao" label="Identificação">
                     <FormKit
                         type="text"
@@ -50,7 +49,6 @@
                     />
                 </FormKit>
 
-                <!-- Passo 2: Informações Funcionais -->
                 <FormKit
                     type="step"
                     name="informacoes_funcionais"
@@ -92,7 +90,6 @@
                     />
                 </FormKit>
 
-                <!-- Passo 3: Endereço -->
                 <FormKit type="step" name="endereco" label="Endereço">
                     <FormKit
                         type="text"

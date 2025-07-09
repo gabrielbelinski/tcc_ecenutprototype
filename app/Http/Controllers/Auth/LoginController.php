@@ -13,7 +13,7 @@ class LoginController extends Controller
 {
     public function showLoginForm()
     {
-        return inertia('Login/Login'); // Your login view
+        return inertia('Login/Login');
     }
 
     public function login(LoginRequest $request)
@@ -23,7 +23,6 @@ class LoginController extends Controller
             'senha' => $request->senha
         ];
 
-        // Debug: Verifique se o usuário existe
         $user = Usuario::where('email', $request->email)->first();
 
         if (!$user) {
@@ -32,14 +31,12 @@ class LoginController extends Controller
             ]);
         }
 
-        // Debug: Verifique a senha manualmente
         if (!Hash::check($request->senha, $user->senha)) {
             return back()->withErrors([
                 'message' => 'Senha incorreta'
             ]);
         }
 
-        // Tente autenticar normalmente
         if (!Auth::login($user)) {
             return back()->withErrors([
                 'message' => 'Falha na autenticação'

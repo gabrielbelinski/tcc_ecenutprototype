@@ -66,6 +66,6 @@ class Consulta extends Model
 
     public static function getConsultasDia()
     {
-        return self::with('paciente')->whereDate('data_consulta', Carbon::today())->orderBy('hora_consulta', 'desc')->where('status_consulta', '!=', 'Concluída')->get();
+        return self::with('paciente')->whereDate('data_consulta', Carbon::today())->orderBy('hora_consulta', 'asc')->where('status_consulta', '!=', 'Concluída')->get();
     }
 }

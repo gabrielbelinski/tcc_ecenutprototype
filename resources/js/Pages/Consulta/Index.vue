@@ -23,37 +23,47 @@
                     v-if="selectedConsulta"
                     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
                 >
-                    <div class="bg-white rounded-lg shadow-xl p-6 w-64">
-                        <h3 class="text-lg font-medium mb-4">Ações</h3>
+                    <div class="bg-white rounded-lg shadow-xl p-4 w-55">
+                        <h3 class="text-lg font-medium mb-3 text-center">
+                            Ações
+                        </h3>
 
-                        <button
-                            @click="visualizarConsulta"
-                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        >
-                            Visualizar consulta
-                        </button>
-
-                        <button
-                            @click="reagendarConsulta"
-                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                        >
-                            Reagendar consulta
-                        </button>
-
-                        <button
-                            @click="excluirConsulta"
-                            class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-                        >
-                            Cancelar consulta
-                        </button>
-
-                        <div class="mt-4 pt-4 border-t">
-                            <button
-                                @click="selectedConsulta = null"
-                                class="w-full px-4 py-2 text-sm text-gray-500 hover:text-gray-700"
+                        <div class="place-items-center">
+                            <NButton
+                                size="small"
+                                type="primary"
+                                @click="visualizarConsulta"
+                                class="me-5"
                             >
-                                Cancelar
-                            </button>
+                                Visualizar consulta
+                            </NButton>
+
+                            <NButton
+                                size="small"
+                                type="primary"
+                                @click="reagendarConsulta"
+                                class="me-5"
+                            >
+                                Reagendar consulta
+                            </NButton>
+
+                            <NButton
+                                size="small"
+                                type="error"
+                                @click="excluirConsulta"
+                            >
+                                Cancelar consulta
+                            </NButton>
+
+                            <div class="mt-4 pt-4 border-t">
+                                <NButton
+                                    size="small"
+                                    @click="selectedConsulta = null"
+                                    class="mb-3"
+                                >
+                                    Cancelar
+                                </NButton>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -66,6 +76,7 @@
 import { ref, computed } from "vue";
 import { router, usePage } from "@inertiajs/vue3";
 import { CalendarView, CalendarViewHeader } from "vue-simple-calendar";
+import { NButton } from "naive-ui";
 import "vue-simple-calendar/dist/vue-simple-calendar.css";
 import "vue-simple-calendar/dist/css/default.css";
 import "vue-simple-calendar/dist/css/holidays-us.css";
@@ -81,12 +92,9 @@ const setShowDate = (date) => {
 
 const calendarItems = computed(() => {
     return page.props.consultas.map((consulta) => {
-        // Use a data ISO que enviamos do backend ou crie com fuso horário explícito
         const dataConsulta = new Date(
             consulta.data_iso || consulta.data_consulta
         );
-
-        // Corrige o problema do fuso horário do JavaScript
         const adjustedDate = new Date(
             dataConsulta.getTime() + dataConsulta.getTimezoneOffset() * 60000
         );
@@ -123,7 +131,7 @@ const reagendarConsulta = () => {
 const excluirConsulta = () => {
     if (
         selectedConsulta.value &&
-        confirm("Tem certeza que deseja excluir esta consulta?")
+        confirm("Tem certeza de que deseja cancelar esta consulta?")
     ) {
         router.delete(`/consulta/${selectedConsulta.value.id}`, {
             onSuccess: () => {
@@ -135,7 +143,6 @@ const excluirConsulta = () => {
 </script>
 
 <style scoped>
-/* Estilos para o modal */
 .fixed {
     position: fixed;
 }

@@ -16,7 +16,7 @@ class UsuarioFactory extends Factory
         return [
             'nome' => $faker->name(),
             'email' => $faker->unique()->safeEmail(),
-            'senha' => bcrypt('senha123'), // você pode alterar conforme o hash usado no sistema
+            'senha' => bcrypt('senha123'),
             'matricula' => $faker->unique()->numerify('########'),
             'genero' => $faker->randomElement([
                 'Masculino',
@@ -25,7 +25,7 @@ class UsuarioFactory extends Factory
                 'Prefere não informar',
             ]),
             'data_nascimento' => $faker->optional()->date(),
-            'data_inativacao' => $faker->optional(0.1)->dateTime(), // 10% chance de estar inativo
+            'data_inativacao' => $faker->optional(0.1)->dateTime(),
             'telefone' => $faker->optional()->cellphoneNumber(),
             'rg' => $faker->optional()->numerify('##.###.###-#'),
             'cpf' => $faker->optional()->cpf(false),

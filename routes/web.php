@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\AvaliacaoController;
 use App\Http\Controllers\PacienteController;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ConsultaController;
@@ -10,6 +11,7 @@ Route::get('/', function () {
     if (auth()->check()) {
         return inertia('Index/Index');
     }
+    return redirect()->route('login');
 });
 
 Route::middleware('guest')->group(function () {
@@ -53,6 +55,7 @@ Route::middleware('auth')->group(function () {
             Route::get('/', [ConsultaController::class, 'prontuarios'])->name('consulta.indexProntuarios');
             Route::get('/anamnese/{id}', [ConsultaController::class, 'showAnamnese'])->name('consulta.showAnamnese');
             Route::get('/acompanhamento/{id}', [ConsultaController::class, 'showAcompanhamento'])->name('consulta.showAcompanhamento');
+            Route::get('/evolucao/{id}', [ConsultaController::class, 'showEvolucao'])->name('consulta.showEvolucao');
         });
     });
     Route::resource('consulta', ConsultaController::class)->names([
@@ -64,5 +67,6 @@ Route::middleware('auth')->group(function () {
         'store' => 'consulta.store',
         'destroy' => 'consulta.destroy',
     ]);
+    Route::resource('avaliacao', AvaliacaoController::class);
 });
 
